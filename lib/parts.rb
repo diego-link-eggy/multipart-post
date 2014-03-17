@@ -40,10 +40,10 @@ module Parts
     end
 
     def build_part(boundary, name, value, headers = {})
+      headers = {"Content-Disposition" => "form-data; name=\"#{name.to_s}\""}.merge(headers)
       part = ''
       part << "--#{boundary}\r\n"
-      part << "Content-Disposition: form-data; name=\"#{name.to_s}\"\r\n"
-      part << "Content-Type: #{headers["Content-Type"]}\r\n" if headers["Content-Type"]
+      headers.each { |key, value| part << "#{key}: #{value}\r\n" }
       part << "\r\n"
       part << "#{value}\r\n"
     end
